@@ -1,10 +1,10 @@
 #!/bin/bash
 clear
-echo "Select need Box64Droid version to install:"
+echo "Select need Box64D version to install:"
 echo "1) Non-root version (Adreno 610-740, Android 12+)"
 echo "2) Root version (Adreno 610-740, Android 10+)"
 echo "3) VirGL version (Another GPU's, for non-root phones, Android 12+)"
-echo "4) Cancel Box64Droid installation"
+echo "4) Cancel Box64D installation"
 echo ""
 read version
 if [ $version = 1 ] || [ $version = 2 ] || [ $version = 3 ]
@@ -21,8 +21,8 @@ else
 	exit
 fi
 clear
-echo " Starting Box64Droid installation..." & sleep 3
-echo " Box64Droid creates a folder called "Box64Droid" at the internal storage to store configuration files. For Termux to create this folder, it is necessary to have storage permissions, click on allow to proceed." & sleep 5 &>/dev/null	
+echo " Starting Box64D installation..." & sleep 3
+echo " Box64D creates a folder called "Box64D" at the internal storage to store configuration files. For Termux to create this folder, it is necessary to have storage permissions, click on allow to proceed." & sleep 5 &>/dev/null	
 termux-setup-storage & sleep 3 &>/dev/null
 pkg update -y
 echo ""
@@ -44,16 +44,16 @@ fi
 echo ""
 if [ $version = 1 ] || [ $version = 3 ]
 then
-        if [ -d $PREFIX/var/lib/proot-distro/installed-rootfs/ubuntu/root/.wine ]
+        if [ -d $PREFIX/var/lib/proot-distro/installed-rootfs/debian/root/.wine ]
         then
-                echo " Previous Box64Droid detected. You want backup Wine prefix and restore after update? (yes/no, another = skip)"
+                echo " Previous Box64D detected. You want backup Wine prefix and restore after update? (yes/no, another = skip)"
                 read choice
 		if [ -z $choice ]
 		then
 			&>/dev/null
 		elif [ $choice = yes ]
                 then
-                        mv $PREFIX/var/lib/proot-distro/installed-rootfs/ubuntu/root/.wine ~/
+                        mv $PREFIX/var/lib/proot-distro/installed-rootfs/debian/root/.wine ~/
                         echo "Backup finished"
                         echo ""
                 elif [ $choice = no ]
@@ -64,13 +64,13 @@ then
                 &>/dev/null
         fi
 else
-        if sudo [ -d /data/data/com.termux/files/home/ubuntu/root/.wine ]
+        if sudo [ -d /data/data/com.termux/files/home/debian/root/.wine ]
         then
-                echo " Previous Box64Droid detected. You want backup Wine prefix and restore after update? (yes/no, another = skip)"
+                echo " Previous Box64D detected. You want backup Wine prefix and restore after update? (yes/no, another = skip)"
                 read choice
                 if [ $choice = yes ]
                 then
-                        sudo mv /data/data/com.termux/files/home/ubuntu/root/.wine ~/
+                        sudo mv /data/data/com.termux/files/home/debian/root/.wine ~/
                         echo "Backup finished"
                         echo ""
                 elif [ $choice = no ]
@@ -80,13 +80,13 @@ else
 		then
 			&>/dev/null
                 fi
-		if [ -c ~/ubuntu/dev/urandom ]
+		if [ -c ~/debian/dev/urandom ]
 	        then
-              	        sudo umount ~/ubuntu/proc &>/dev/null
-        	        sudo umount ~/ubuntu/sys &>/dev/null
-                	sudo umount ~/ubuntu/dev/pts &>/dev/null
-	                sudo umount ~/ubuntu/dev &>/dev/null
-	                sudo umount ~/ubuntu/sdcard &>/dev/null
+              	        sudo umount ~/debian/proc &>/dev/null
+        	        sudo umount ~/debian/sys &>/dev/null
+                	sudo umount ~/debian/dev/pts &>/dev/null
+	                sudo umount ~/debian/dev &>/dev/null
+	                sudo umount ~/debian/sdcard &>/dev/null
         	else
                 	&>/dev/null
 	        fi
@@ -97,29 +97,29 @@ fi
 echo ""
 echo " Downloading and installing the Termux-x11 package..."
 echo ""
-wget https://github.com/Ilya114/Box64Droid/raw/main/apps/termux-x11-1.02.07-0-all.deb &>/dev/null
+wget https://github.com/mgueji/Box64D/raw/main/apps/termux-x11-1.02.07-0-all.deb &>/dev/null
 dpkg -i termux-x11-1.02.07-0-all.deb &>/dev/null
 echo " Termux-x11 installed"
 echo ""
-echo " Checking for older Box64Droid and removing them if any"
+echo " Checking for older Box64D and removing them if any"
 echo ""
-if [ -f $PREFIX/bin/box64droid ]
+if [ -f $PREFIX/bin/box64d ]
 then
-	rm $PREFIX/bin/box64droid &>/dev/null
+	rm $PREFIX/bin/box64d &>/dev/null
 else
 	&>/dev/null
 fi
-if [ -d /sdcard/Box64Droid ]
+if [ -d /sdcard/Box64D ]
 then
-	rm -r /sdcard/Box64Droid &>/dev/null
+	rm -r /sdcard/Box64D &>/dev/null
 else
 	&>/dev/null
 fi
 if [ $version = 1 ] || [ $version = 3 ]
 then
-	proot-distro remove ubuntu &>/dev/null
+	proot-distro remove debian &>/dev/null
 else
-	sudo rm -r ~/ubuntu &>/dev/null
+	sudo rm -r ~/debian &>/dev/null
 fi
 echo " Downloading preconfigured rootfs..."
 echo ""
@@ -127,58 +127,58 @@ if [ $version = 1 ]
 then
 	mkdir /data/data/com.termux/files/usr/var/lib/proot-distro/ &>/dev/null
 	mkdir /data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/ &>/dev/null
-	mkdir /data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/ubuntu &>/dev/null
-	wget -q --show-progress https://github.com/Ilya114/Box64Droid/releases/download/beta/box64droid-rootfs-beta.tar.xz
+	mkdir /data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/debian &>/dev/null
+	wget -q --show-progress https://github.com/mgueji/Box64D/releases/download/beta/box64d-rootfs-beta.tar.xz
 elif [ $version = 2 ]
 then
-	wget -q --show-progress https://github.com/Ilya114/Box64Droid/releases/download/chroot/box64droid-rootfs-beta-chroot.tar.xz
+	wget -q --show-progress https://github.com/mgueji/Box64D/releases/download/chroot/box64d-rootfs-beta-chroot.tar.xz
 else
 	mkdir /data/data/com.termux/files/usr/var/lib/proot-distro/ &>/dev/null
 	mkdir /data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/ &>/dev/null
-	mkdir /data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/ubuntu &>/dev/null
-	wget -q --show-progress https://github.com/Ilya114/Box64Droid/releases/download/virgl/box64droid-rootfs-beta-virgl.tar.xz
+	mkdir /data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/debian &>/dev/null
+	wget -q --show-progress https://github.com/mgueji/Box64D/releases/download/virgl/box64d-rootfs-beta-virgl.tar.xz
 fi
 echo ""
 echo " Installing rootfs, please wait..."
 if [ $version = 1 ]
 then
-	proot-distro restore box64droid-rootfs-beta.tar.xz &>/dev/null
+	proot-distro restore box64d-rootfs-beta.tar.xz &>/dev/null
 elif [ $version = 2 ]
 then
-	sudo mkdir ~/ubuntu
-	sudo tar -xJf box64droid-rootfs-beta-chroot.tar.xz -C ~/ubuntu &>/dev/null
+	sudo mkdir ~/debian
+	sudo tar -xJf box64d-rootfs-beta-chroot.tar.xz -C ~/debian &>/dev/null
 else
-	proot-distro restore box64droid-rootfs-beta-virgl.tar.xz &>/dev/null
+	proot-distro restore box64d-rootfs-beta-virgl.tar.xz &>/dev/null
 fi
 echo ""
 echo " Rootfs installed"
 echo ""
-echo " Downloading Box64Droid starting scripts..."
+echo " Downloading Box64D starting scripts..."
 if [ $version = 1 ]
 then
-	wget https://raw.githubusercontent.com/Ilya114/Box64Droid/main/scripts/box64droid &>/dev/null
-	wget https://raw.githubusercontent.com/Ilya114/Box64Droid/main/scripts/start-box64droid &>/dev/null
-	chmod +x start-box64droid
-	chmod +x box64droid &>/dev/null
-	mv box64droid start-box64droid $PREFIX/bin/ &>/dev/null
+	wget https://raw.githubusercontent.com/mgueji/Box64D/main/scripts/box64d &>/dev/null
+	wget https://raw.githubusercontent.com/mgueji/Box64D/main/scripts/start-box64d &>/dev/null
+	chmod +x start-box64d
+	chmod +x box64d &>/dev/null
+	mv box64d start-box64d $PREFIX/bin/ &>/dev/null
 elif [ $version = 2 ]
 then
-	wget https://raw.githubusercontent.com/Ilya114/Box64Droid/main/scripts/box64droid-root &>/dev/null
-	chmod +x box64droid-root &>/dev/null
-	mv box64droid-root $PREFIX/bin/box64droid &>/dev/null
+	wget https://raw.githubusercontent.com/mgueji/Box64D/main/scripts/box64d-root &>/dev/null
+	chmod +x box64d-root &>/dev/null
+	mv box64d-root $PREFIX/bin/box64d &>/dev/null
 else
-	wget https://raw.githubusercontent.com/Ilya114/Box64Droid/main/scripts/box64droid-virgl &>/dev/null
-	wget https://raw.githubusercontent.com/Ilya114/Box64Droid/main/scripts/start-box64droid &>/dev/null
-	chmod +x start-box64droid
-	chmod +x box64droid-virgl &>/dev/null
-	mv box64droid-virgl $PREFIX/bin/box64droid &>/dev/null
-	mv start-box64droid $PREFIX/bin/ &>/dev/null
+	wget https://raw.githubusercontent.com/mgueji/Box64D/main/scripts/box64d-virgl &>/dev/null
+	wget https://raw.githubusercontent.com/mgueji/Box64D/main/scripts/start-box64d &>/dev/null
+	chmod +x start-box64d
+	chmod +x box64d-virgl &>/dev/null
+	mv box64d-virgl $PREFIX/bin/box64d &>/dev/null
+	mv start-box64d $PREFIX/bin/ &>/dev/null
 fi
 echo ""
 echo " Scripts installed"
 echo ""
 echo " Removing installation waste..."
-rm -rf box64droid-rootfs-beta*.tar.xz &>/dev/null
+rm -rf box64d-rootfs-beta*.tar.xz &>/dev/null
 rm -rf install &>/dev/null
 rm -rf termux-x11-1.02.07-0-all.deb &>/dev/null
 if [ -d ~/.wine ]
@@ -187,11 +187,11 @@ then
 	echo ""
 	if [ $version = 1 ] || [ $version = 3 ]
 	then
-		rm -r $PREFIX/var/lib/proot-distro/installed-rootfs/ubuntu/root/.wine
-		mv ~/.wine $PREFIX/var/lib/proot-distro/installed-rootfs/ubuntu/root/
+		rm -r $PREFIX/var/lib/proot-distro/installed-rootfs/debian/root/.wine
+		mv ~/.wine $PREFIX/var/lib/proot-distro/installed-rootfs/debian/root/
 	else
-		sudo rm -r ~/ubuntu/root/.wine
-		sudo mv ~/.wine ~/ubuntu/root/
+		sudo rm -r ~/debian/root/.wine
+		sudo mv ~/.wine ~/debian/root/
 	fi
 	echo " Backup restored"
 else
@@ -199,7 +199,7 @@ else
 fi
 clear
 echo ""
-echo " Install finished. To start Box64Droid type 'box64droid --start', to see more arguments type 'box64droid --help'"
+echo " Install finished. To start Box64D type 'box64d --start', to see more arguments type 'box64d --help'"
 echo ""
 echo " And if everything goes as planned, the Wine environment will start and soon after TFM will open, that's it."
 echo ""
