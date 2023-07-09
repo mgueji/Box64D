@@ -1,0 +1,41 @@
+#!/bin/bash
+if [ $# -eq 0 ]
+then
+	echo "Empty argument, use --help to see available arguments"
+elif [ $1 = "--start" ]
+then
+	echo "Starting Termux-x11..."
+	termux-x11 :0 &>/dev/null & pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1 &>/dev/null
+	echo ""
+	echo -e "Termux-x11 started"
+	echo ""
+	echo "Starting Box64D..."
+	$PREFIX/bin/start-box64d
+	pkill -f "app_process / com.termux.x11"
+elif [ $1 = "--update" ]
+then
+	cd ~/
+	curl -o install https://raw.githubusercontent.com/mgueji/Box64D/main/scripts/install && chmod +x install && ./install
+elif [ $1 = "--uninstall" ]
+then
+	echo "Uninstalling Box64D..."
+	proot-distro remove debian &>/dev/null
+	rm $PREFIX/bin/box64d
+	rm $PREFIX/bin/start-box64d
+	echo "Done!"
+elif [ $1 = "--version" ]
+then
+        echo "09.07.23"
+elif [ $1 = "--help" ]
+then
+        echo "Box64D - preconfigured Debian rootfs with Box64, Box86, Wine Proton, DXVK and Adreno GPU drivers for Android"
+	echo "Usage: box64d {argument}"
+	echo "Available arguments:"
+	echo "--start - start Box64D"
+	echo "--update - update Box64D"
+	echo "--uninstall - uninstall Box64D (all data in rootfs will be cleared)"
+	echo "--version - show current version of Box64D"
+	echo "--help - see available arguments"
+else
+	echo "Invalid argument, use --help to see available arguments"
+fi
